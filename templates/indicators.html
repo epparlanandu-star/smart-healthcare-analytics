@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<title>Health Indicators | Smart Healthcare System</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- Header -->
+<header class="app-header">
+    <div class="header-content">
+
+        <div class="header-text">
+            <p class="eyebrow">HEALTHCARE MANAGEMENT SYSTEM</p>
+
+            <h1>Health Indicators</h1>
+
+            <p class="header-subtitle">
+                Analyze health assessments
+            </p>
+        </div>
+
+        <form action="{{ url_for('logout') }}" method="POST">
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+            <button type="submit" class="logout-button">
+                Logout
+            </button>
+        </form>
+
+    </div>
+</header>
+    <div class="disclaimer">
+        <strong>Important:</strong>
+        This application provides educational health indicators only.
+        It does not provide a medical diagnosis or replace professional care.
+    </div>
+
+<!-- Navigation -->
+<nav class="nav" aria-label="Main navigation">
+
+    <a href="{{ url_for('home') }}"
+       class="nav-button {% if request.path == '/' %}active{% endif %}">
+        Dashboard
+    </a>
+
+    <a href="{{ url_for('patients_page') }}"
+       class="nav-button {% if request.path == '/patients' %}active{% endif %}">
+        Patients
+    </a>
+
+    <a href="{{ url_for('assessment_page') }}"
+       class="nav-button {% if request.path == '/assessments' %}active{% endif %}">
+        Assessment
+    </a>
+
+    <a href="{{ url_for('visits_page') }}"
+       class="nav-button {% if request.path == '/visits' %}active{% endif %}">
+        Visits
+    </a>
+
+    <a href="{{ url_for('history_page') }}"
+       class="nav-button {% if request.path == '/history' %}active{% endif %}">
+        Patient History
+    </a>
+
+    <a href="{{ url_for('indicators_page') }}"
+       class="nav-button {% if request.path == '/indicators' %}active{% endif %}">
+        Health Indicators
+    </a>
+
+</nav>
+
+<!-- Message area -->
+<div id="message"
+     class="message"
+     role="status"
+     aria-live="polite">
+</div>
+
+<!-- Main content -->
+<main>
+
+    <section id="indicators" class="tab-section">
+
+        <!-- Page heading -->
+        <div class="section-heading">
+            <p class="eyebrow">HEALTH ANALYSIS</p>
+
+            <h2>Health Indicators</h2>
+
+            <p>
+                Analyze measurements from a recorded health assessment
+                and explore their educational explanations.
+            </p>
+        </div>
+
+        <!-- Assessment ID form -->
+        <div class="content-card">
+
+            <div class="card-heading">
+                <h3>Analyze Assessment</h3>
+
+                <p>
+                    Enter an assessment ID to retrieve its health indicators.
+                </p>
+            </div>
+
+            <form id="indicatorForm" class="form-grid">
+
+                <div class="form-group full-width">
+
+                    <label for="indicatorAssessmentId">
+                        Assessment ID
+                    </label>
+
+                    <input
+                        type="number"
+                        id="indicatorAssessmentId"
+                        name="assessment_id"
+                        min="1"
+                        placeholder="Enter assessment ID"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group full-width">
+
+                    <button type="submit" class="primary-button">
+                        Analyze Indicators
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- Results -->
+        <div class="content-card results-container">
+
+            <div class="card-heading">
+                <h3>Analysis Results</h3>
+
+                <p>
+                    The results for the selected assessment will appear below.
+                </p>
+            </div>
+
+            <div id="indicatorResults"
+                 class="indicator-results"
+                 aria-live="polite">
+
+                <p>
+                    Enter an assessment ID and select
+                    <strong>Analyze Indicators</strong> to view the results.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="app-footer">
+
+    <p class="disclaimer">
+        These indicators provide educational information only.
+        They are not diagnoses or validated predictions of disease.
+        Consult a qualified healthcare professional for medical advice.
+    </p>
+
+</footer>
+
+</div>
+
+<!-- Shared JavaScript -->
+
+<script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
+</body>
+</html>

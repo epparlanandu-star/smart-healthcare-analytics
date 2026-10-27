@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Patients | Smart Healthcare Analytics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+
+            <div class="header-text">
+                <p class="eyebrow">HEALTHCARE MANAGEMENT SYSTEM</p>
+
+                <h1>Patient Registration</h1>
+
+                <p class="header-subtitle">
+                    Register and manage patient records
+                </p>
+            </div>
+
+            <form action="{{ url_for('logout') }}" method="POST">
+                <input type="hidden"
+                       name="csrf_token"
+                       value="{{ csrf_token() }}">
+
+                <button type="submit" class="logout-button">
+                    Logout
+                </button>
+            </form>
+
+        </div>
+    </header>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+        <strong>Important:</strong>
+        This application provides educational health indicators only.
+        It does not provide a medical diagnosis or replace professional care.
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" aria-label="Main navigation">
+
+        <a href="{{ url_for('home') }}"
+           class="nav-button">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('patients_page') }}"
+           class="nav-button active">
+            Patients
+        </a>
+
+        <a href="{{ url_for('assessment_page') }}"
+           class="nav-button">
+            Assessment
+        </a>
+
+        <a href="{{ url_for('visits_page') }}"
+           class="nav-button">
+            Visits
+        </a>
+
+        <a href="{{ url_for('history_page') }}"
+           class="nav-button">
+            Patient History
+        </a>
+
+        <a href="{{ url_for('indicators_page') }}"
+           class="nav-button">
+            Health Indicators
+        </a>
+
+    </nav>
+
+    <!-- Message area -->
+    <p id="message"
+       class="message"
+       role="status"
+       aria-live="polite">
+    </p>
+
+    <main>
+
+        <section class="tab-section">
+
+            <!-- Patient Registration -->
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">PATIENT MANAGEMENT</p>
+
+                    <h2>Register a Patient</h2>
+
+                    <p class="section-description">
+                        Add a patient to the healthcare database.
+                    </p>
+                </div>
+            </div>
+
+            <div class="content-card">
+
+                <div class="card-heading">
+                    <h3>Patient Details</h3>
+
+                    <p>Enter the patient's information below.</p>
+                </div>
+
+                <form id="patientForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="patientName">Full Name</label>
+
+                            <input
+                                type="text"
+                                id="patientName"
+                                name="name"
+                                placeholder="Enter patient's name"
+                                maxlength="100"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patientAge">Age</label>
+
+                            <input
+                                type="number"
+                                id="patientAge"
+                                name="age"
+                                placeholder="Enter age"
+                                min="1"
+                                max="120"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patientSex">Sex</label>
+
+                            <select id="patientSex"
+                                    name="sex"
+                                    required>
+                                <option value="">Select sex</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patientDepartment">Department</label>
+
+                            <select id="patientDepartment"
+                                    name="department"
+                                    required>
+                                <option value="">Select department</option>
+                                <option value="General">General</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                                <option value="Dermatology">Dermatology</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="primary-button">
+                        Register Patient
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- Date-wise Patient Search -->
+            <div class="content-card">
+
+                <div class="card-heading">
+                    <h3>Find Patients by Registration Date</h3>
+
+                    <p>
+                        Select a date to view only patients registered
+                        on that day.
+                    </p>
+                </div>
+
+                <form id="patientDateForm" class="form-grid">
+
+                    <div class="form-group full-width">
+
+                        <label for="patientSearchDate">
+                            Registration Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="patientSearchDate"
+                            name="date"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group full-width">
+
+                        <div class="inline-form">
+
+                            <button type="submit" class="primary-button">
+                                Search Patients
+                            </button>
+
+                            <button type="button"
+                                    id="showAllPatients"
+                                    class="primary-button">
+                                Show All Patients
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- Patient List -->
+            <div class="content-card">
+
+                <div class="card-heading">
+                    <h3 id="patientListHeading">Registered Patients</h3>
+
+                    <p id="patientListDescription">
+                        Patient records currently available in the database.
+                    </p>
+                </div>
+
+                <div id="patientList" class="table-container">
+                    Loading patient records...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>Smart Healthcare Analytics</p>
+        <p>
+            Patient data should be handled securely and confidentially.
+        </p>
+    </footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
+</body>
+</html>

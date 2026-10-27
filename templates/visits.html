@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<title>Patient Visits | Smart Healthcare System</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- Header -->
+<header class="app-header">
+    <div class="header-content">
+        <div class="header-text">
+            <p class="eyebrow">HEALTHCARE MANAGEMENT SYSTEM</p>
+            <h1>Patient Visits</h1>
+            <p class="header-subtitle">
+                Record and manage patient visits.
+            </p>
+        </div>
+
+        <form action="{{ url_for('logout') }}" method="POST">
+            <input type="hidden" name="csrf_token"
+                   value="{{ csrf_token() }}">
+            <button type="submit" class="logout-button">
+                Logout
+            </button>
+        </form>
+    </div>
+</header>
+    <div class="disclaimer">
+        <strong>Important:</strong>
+        This application provides educational health indicators only.
+        It does not provide a medical diagnosis or replace professional care.
+    </div>
+
+<!-- Navigation -->
+<nav class="nav" aria-label="Main navigation">
+
+    <a href="{{ url_for('home') }}"
+       class="nav-button {% if request.path == '/' %}active{% endif %}">
+        Dashboard
+    </a>
+
+    <a href="{{ url_for('patients_page') }}"
+       class="nav-button {% if request.path == '/patients' %}active{% endif %}">
+        Patients
+    </a>
+
+    <a href="{{ url_for('assessment_page') }}"
+       class="nav-button {% if request.path == '/assessments' %}active{% endif %}">
+        Assessment
+    </a>
+
+    <a href="{{ url_for('visits_page') }}"
+       class="nav-button {% if request.path == '/visits' %}active{% endif %}">
+        Visits
+    </a>
+
+    <a href="{{ url_for('history_page') }}"
+       class="nav-button {% if request.path == '/history' %}active{% endif %}">
+        Patient History
+    </a>
+
+    <a href="{{ url_for('indicators_page') }}"
+       class="nav-button {% if request.path == '/indicators' %}active{% endif %}">
+        Health Indicators
+    </a>
+
+</nav>
+
+<!-- Message Area -->
+<div id="message"
+     class="message"
+     role="status"
+     aria-live="polite"></div>
+
+<!-- Main Content -->
+<main>
+
+    <section id="visits" class="tab-section">
+
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">PATIENT RECORDS</p>
+                <h2>Record Patient Visit</h2>
+                <p>
+                    Enter the details below to record a patient visit.
+                </p>
+            </div>
+        </div>
+
+        <div class="content-card">
+
+            <div class="card-heading">
+                <h3>Visit Details</h3>
+                <p>Provide the patient's visit information below.</p>
+            </div>
+
+            <form id="visitForm" class="form-grid">
+
+                <div class="form-group">
+                    <label for="visitPatientId">Patient ID</label>
+                    <input
+                        type="number"
+                        id="visitPatientId"
+                        name="patient_id"
+                        min="1"
+                        placeholder="Enter patient ID"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="visitType">Visit Type</label>
+                    <select
+                        id="visitType"
+                        name="visit_type"
+                        required>
+                        <option value="">Select visit type</option>
+                        <option value="Consultation">Consultation</option>
+                        <option value="Follow-up">Follow-up</option>
+                        <option value="Emergency">Emergency</option>
+                        <option value="Routine Checkup">Routine Checkup</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+    <label for="visitDepartment">Department</label>
+    <select
+        id="visitDepartment"
+        name="department"
+        required
+    >
+        <option value="">Select Department</option>
+        <option value="General">General Medicine</option>
+        <option value="Cardiology">Cardiology</option>
+        <option value="Neurology">Neurology</option>
+        <option value="Orthopedics">Orthopedics</option>
+        <option value="Pediatrics">Pediatrics</option>
+        <option value="Dermatology">Dermatology</option>
+        <option value="Other">Other</option>
+    </select>
+</div>
+
+                <div class="form-group full-width">
+                    <label for="visitNotes">Visit Notes</label>
+                    <textarea
+                        id="visitNotes"
+                        name="notes"
+                        rows="4"
+                        maxlength="2000"
+                        placeholder="Enter visit notes (optional)"
+                    ></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <button type="submit" class="primary-button">
+                        Record Visit
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="disclaimer">
+            <strong>Privacy Notice:</strong>
+            Patient information must be handled confidentially.
+            This system supports healthcare record management and
+            does not replace professional medical advice.
+        </div>
+
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="app-footer">
+    <p>Smart Healthcare Analysis System</p>
+    <p>Patient visit management</p>
+</footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
+</body>
+</html>

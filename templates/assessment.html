@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Health Assessment | Smart Healthcare System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+
+    <body>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-text">
+                    <p class="eyebrow">HEALTHCARE MANAGEMENT SYSTEM</p>
+                    <h1>Health Assessment</h1>
+                    <p class="header-subtitle">
+                        Record and manage patient health measurements.
+                    </p>
+                </div>
+
+                <form action="{{ url_for('logout') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            </div>
+        </header>
+
+        <div class="disclaimer">
+        <strong>Important:</strong>
+        This application provides educational health indicators only.
+        It does not provide a medical diagnosis or replace professional care.
+    </div>
+
+        <!-- Navigation -->
+        <nav class="nav" aria-label="Main navigation">
+
+            <a href="{{ url_for('home') }}"
+               class="nav-button {% if request.path == '/' %}active{% endif %}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('patients_page') }}"
+               class="nav-button {% if request.path == '/patients' %}active{% endif %}">
+                Patients
+            </a>
+
+            <a href="{{ url_for('assessment_page') }}"
+               class="nav-button {% if request.path == '/assessments' %}active{% endif %}">
+                Assessment
+            </a>
+
+            <a href="{{ url_for('visits_page') }}"
+               class="nav-button {% if request.path == '/visits' %}active{% endif %}">
+                Visits
+            </a>
+
+            <a href="{{ url_for('history_page') }}"
+               class="nav-button {% if request.path == '/history' %}active{% endif %}">
+                Patient History
+            </a>
+
+            <a href="{{ url_for('indicators_page') }}"
+               class="nav-button {% if request.path == '/indicators' %}active{% endif %}">
+                Health Indicators
+            </a>
+
+        </nav>
+
+        <!-- Message Area -->
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+
+        <!-- Main Content -->
+        <main>
+
+            <section id="assessment" class="tab-section">
+
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">PATIENT RECORDS</p>
+                        <h2>Record Health Assessment</h2>
+                        <p>
+                            Enter the patient's measurements to record a new
+                            health assessment.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+
+                    <div class="card-heading">
+                        <h3>Patient Measurements</h3>
+                        <p>All fields are required.</p>
+                    </div>
+
+                    <form id="assessmentForm" class="form-grid">
+
+                        <div class="form-group">
+                            <label for="assessmentPatientId">Patient ID</label>
+                            <input
+                                type="number"
+                                id="assessmentPatientId"
+                                name="patient_id"
+                                min="1"
+                                placeholder="Enter patient ID"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="heightCm">Height (cm)</label>
+                            <input
+                                type="number"
+                                id="heightCm"
+                                name="height_cm"
+                                min="50"
+                                max="250"
+                                step="0.1"
+                                placeholder="e.g. 170"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weightKg">Weight (kg)</label>
+                            <input
+                                type="number"
+                                id="weightKg"
+                                name="weight_kg"
+                                min="2"
+                                max="500"
+                                step="0.1"
+                                placeholder="e.g. 65"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="systolicBp">
+                                Systolic Blood Pressure (mmHg)
+                            </label>
+                            <input
+                                type="number"
+                                id="systolicBp"
+                                name="systolic_bp"
+                                min="40"
+                                max="300"
+                                placeholder="e.g. 120"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="diastolicBp">
+                                Diastolic Blood Pressure (mmHg)
+                            </label>
+                            <input
+                                type="number"
+                                id="diastolicBp"
+                                name="diastolic_bp"
+                                min="20"
+                                max="200"
+                                placeholder="e.g. 80"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="glucose">Glucose</label>
+                            <input
+                                type="number"
+                                id="glucose"
+                                name="glucose"
+                                min="0"
+                                max="2000"
+                                step="0.1"
+                                placeholder="Enter glucose value"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group full-width">
+                            <button type="submit" class="primary-button">
+                                Save Assessment
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="disclaimer">
+                    <strong>Medical Disclaimer:</strong>
+                    This system provides educational health information only.
+                    Its results are not medical diagnoses. Consult a qualified
+                    healthcare professional for medical advice.
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Smart Healthcare Analysis System</p>
+            <p>Patient health records and assessment management</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
+    </body>
+    </html>

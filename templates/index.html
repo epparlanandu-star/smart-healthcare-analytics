@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Dashboard | Smart Healthcare Analytics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-text">
+                <p class="eyebrow">HEALTHCARE MANAGEMENT SYSTEM</p>
+                <h1>Smart Healthcare Analytics</h1>
+                <p class="header-subtitle">
+                    Patient records, health assessments and clinical insights
+                </p>
+            </div>
+
+            <form action="{{ url_for('logout') }}" method="POST">
+                <input type="hidden" name="csrf_token"
+                       value="{{ csrf_token() }}">
+
+                <button type="submit" class="logout-button">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+        <strong>Important:</strong>
+        This application provides educational health indicators only.
+        It does not provide a medical diagnosis or replace professional care.
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="nav" aria-label="Main navigation">
+
+        <a href="{{ url_for('home') }}"
+           class="nav-button {% if request.path == '/' %}active{% endif %}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('patients_page') }}"
+           class="nav-button {% if request.path == '/patients' %}active{% endif %}">
+            Patients
+        </a>
+
+        <a href="{{ url_for('assessment_page') }}"
+           class="nav-button {% if request.path == '/assessments' %}active{% endif %}">
+            Assessment
+        </a>
+
+        <a href="{{ url_for('visits_page') }}"
+           class="nav-button {% if request.path == '/visits' %}active{% endif %}">
+            Visits
+        </a>
+
+        <a href="{{ url_for('history_page') }}"
+           class="nav-button {% if request.path == '/history' %}active{% endif %}">
+            Patient History
+        </a>
+
+        <a href="{{ url_for('indicators_page') }}"
+           class="nav-button {% if request.path == '/indicators' %}active{% endif %}">
+            Health Indicators
+        </a>
+
+    </nav>
+
+    <!-- STATUS MESSAGE -->
+    <p id="message" class="message"
+       role="status" aria-live="polite"></p>
+
+    <main>
+
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="tab-section">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">OVERVIEW</p>
+                    <h2>Dashboard</h2>
+                    <p class="section-description">
+                        A summary of registered patients and recorded healthcare data.
+                    </p>
+                </div>
+
+                <button type="button"
+                        class="secondary-button"
+                        onclick="refreshDashboard()">
+                    Refresh Dashboard
+                </button>
+            </div>
+
+            <!-- STATISTICS -->
+            <div class="stats-grid">
+
+                <article class="stat-card">
+                    <div class="stat-icon patients-icon">P</div>
+                    <p class="stat-label">Total Patients</p>
+                    <h3 id="totalPatients">—</h3>
+                    <p class="stat-note">Registered patient records</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon assessments-icon">A</div>
+                    <p class="stat-label">Total Assessments</p>
+                    <h3 id="totalAssessments">—</h3>
+                    <p class="stat-note">Health assessments recorded</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon visits-icon">V</div>
+                    <p class="stat-label">Total Visits</p>
+                    <h3 id="totalVisits">—</h3>
+                    <p class="stat-note">Patient visits recorded</p>
+                </article>
+
+            </div>
+
+            <!-- RECENT ASSESSMENTS -->
+            <div class="content-card">
+
+                <div class="card-heading">
+                    <div>
+                        <h3>Recent Assessments</h3>
+                        <p>Latest assessment records in the system.</p>
+                    </div>
+                </div>
+
+                <div id="recentAssessments" class="table-container">
+                    Loading assessments...
+                </div>
+
+            </div>
+
+            <!-- CHARTS -->
+            <div class="analytics-grid">
+
+                <article class="content-card chart-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <h3>Patients by Department</h3>
+                            <p>Distribution of registered patients.</p>
+                        </div>
+                    </div>
+
+                    <img
+                        src="{{ url_for('department_chart') }}"
+                        alt="Patients grouped by department"
+                        class="chart-image">
+
+                </article>
+
+                <article class="content-card chart-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <h3>Visits Over Time</h3>
+                            <p>Number of patient visits by date.</p>
+                        </div>
+                    </div>
+
+                    <img
+                        src="{{ url_for('visits_chart') }}"
+                        alt="Number of visits by date"
+                        class="chart-image">
+
+                </article>
+
+            </div>
+
+            <!-- MEASUREMENT AVERAGES -->
+            <div class="content-card">
+
+                <div class="card-heading">
+                    <div>
+                        <h3>Measurement Averages</h3>
+                        <p>
+                            Average values calculated from available assessments.
+                        </p>
+                    </div>
+                </div>
+
+                <div id="measurementAverages" class="averages-grid">
+                    Loading analytics...
+                </div>
+
+            </div>
+
+            <!-- REPORT DOWNLOADS -->
+            <div class="content-card">
+
+                <div class="card-heading">
+                    <div>
+                        <h3>Export Reports</h3>
+                        <p>Download records for reporting and analysis.</p>
+                    </div>
+                </div>
+
+                <div class="export-links">
+
+                    <a href="{{ url_for('download_healthcare_report') }}"
+                       class="download-link">
+                        Download PDF Report
+                    </a>
+
+                    <a href="{{ url_for('export_patients') }}"
+                       class="download-link">
+                        Export Patients CSV
+                    </a>
+
+                    <a href="{{ url_for('export_assessments') }}"
+                       class="download-link">
+                        Export Assessments CSV
+                    </a>
+
+                    <a href="{{ url_for('export_visits') }}"
+                       class="download-link">
+                        Export Visits CSV
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <p>Smart Healthcare Analytics</p>
+        <p>Patient data should be handled securely and confidentially.</p>
+    </footer>
+
+</div>
+
+<!-- JAVASCRIPT -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

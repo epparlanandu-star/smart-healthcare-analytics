@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Login | Smart Healthcare Analytics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="login-page">
+    <main class="login-container">
+        <div class="login-brand">
+            <div class="login-logo" aria-hidden="true">+</div>
+            <p class="eyebrow">HEALTHCARE MANAGEMENT SYSTEM</p>
+            <h1>Smart Healthcare Analytics</h1>
+            <p class="login-subtitle">
+                Secure access to your healthcare analytics dashboard.
+            </p>
+        </div>
+
+        <div class="login-card">
+            <h2>Administrator Login</h2>
+            <p class="login-description">
+                Enter your credentials to continue.
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="login-message {{ category }}"
+                             role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <input type="hidden" name="csrf_token"
+                       value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                        autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required>
+                </div>
+
+                <button type="submit" class="login-submit">
+                    Sign in
+                </button>
+            </form>
+
+            <p class="login-security">
+                <span aria-hidden="true">🔒</span>
+                Secure administrator access
+            </p>
+        </div>
+
+        <footer class="login-footer">
+            Smart Healthcare Analytics · Educational project
+        </footer>
+    </main>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<title>Patient History | Smart Healthcare System</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- Header -->
+<header class="app-header">
+    <div class="header-content">
+
+        <div class="header-text">
+            <p class="eyebrow">HEALTHCARE MANAGEMENT SYSTEM</p>
+
+            <h1>Patient Assessment History</h1>
+
+            <p class="header-subtitle">
+                Patient history records
+            </p>
+        </div>
+
+        <form action="{{ url_for('logout') }}" method="POST">
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+            <button type="submit" class="logout-button">
+                Logout
+            </button>
+        </form>
+
+    </div>
+</header>
+
+    <div class="disclaimer">
+        <strong>Important:</strong>
+        This application provides educational health indicators only.
+        It does not provide a medical diagnosis or replace professional care.
+    </div>
+
+<!-- Navigation -->
+<nav class="nav" aria-label="Main navigation">
+
+    <a href="{{ url_for('home') }}"
+       class="nav-button {% if request.path == '/' %}active{% endif %}">
+        Dashboard
+    </a>
+
+    <a href="{{ url_for('patients_page') }}"
+       class="nav-button {% if request.path == '/patients' %}active{% endif %}">
+        Patients
+    </a>
+
+    <a href="{{ url_for('assessment_page') }}"
+       class="nav-button {% if request.path == '/assessments' %}active{% endif %}">
+        Assessment
+    </a>
+
+    <a href="{{ url_for('visits_page') }}"
+       class="nav-button {% if request.path == '/visits' %}active{% endif %}">
+        Visits
+    </a>
+
+    <a href="{{ url_for('history_page') }}"
+       class="nav-button {% if request.path == '/history' %}active{% endif %}">
+        Patient History
+    </a>
+
+    <a href="{{ url_for('indicators_page') }}"
+       class="nav-button {% if request.path == '/indicators' %}active{% endif %}">
+        Health Indicators
+    </a>
+
+</nav>
+
+<!-- Message area -->
+<div id="message"
+     class="message"
+     role="status"
+     aria-live="polite">
+</div>
+
+<!-- Main content -->
+<main>
+
+    <section id="history" class="tab-section">
+
+        <!-- Page heading -->
+        <div class="section-heading">
+            <p class="eyebrow">PATIENT RECORDS</p>
+
+            <h2>Patient Assessment History</h2>
+
+            <p>
+                View previous health assessments for a registered patient.
+                Enter the patient ID below to retrieve their records.
+            </p>
+        </div>
+
+        <!-- Search form card -->
+        <div class="content-card">
+
+            <div class="card-heading">
+                <h3>Search Patient History</h3>
+
+                <p>
+                    Enter the patient's ID to view their assessment history.
+                </p>
+            </div>
+
+            <form id="historyForm" class="form-grid">
+
+                <div class="form-group full-width">
+                    <label for="historyPatientId">
+                        Patient ID
+                    </label>
+
+                    <input
+                        type="number"
+                        id="historyPatientId"
+                        name="patient_id"
+                        min="1"
+                        placeholder="Enter patient ID"
+                        required
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <button type="submit" class="primary-button">
+                        View History
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- Assessment history results -->
+        <div class="content-card results-container">
+
+            <div class="card-heading">
+                <h3>Assessment Records</h3>
+
+                <p>
+                    The selected patient's previous assessments will
+                    appear below.
+                </p>
+            </div>
+
+            <div id="historyResults" aria-live="polite">
+                <p>
+                    Enter a patient ID and select
+                    <strong>View History</strong> to load records.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="app-footer">
+
+    <p class="disclaimer">
+        Health assessment history is provided for informational
+        purposes and does not replace professional medical advice.
+        Consult a qualified healthcare professional for medical decisions.
+    </p>
+
+</footer>
+
+</div>
+
+<!-- Shared JavaScript -->
+
+<script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
+</body>
+</html>
